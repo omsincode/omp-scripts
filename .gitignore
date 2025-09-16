@@ -1,0 +1,89 @@
+# ==================== Open.MP Server .gitignore ====================
+
+# ========================= Compiled Files ===========================
+# AMX compiled files
+*.amx
+
+# ========================= Server Files =============================
+# Server executable and libraries
+omp-server.exe
+omp-server.pdb
+*.dll
+*.pdb
+
+# ========================= Logs & Data ==============================
+# Log files
+*.log
+logs/
+log.txt
+
+# Database files
+*.db
+*.sqlite
+*.sql.backup
+
+# Ban files
+bans.json
+samp.ban
+
+# ========================= Development Files ====================
+# IDE and editor files
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# ========================= System Files =========================
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+# ========================= Build & Cache ========================
+# Build artifacts
+build/
+dist/
+*.cache
+
+# Node modules (if using any web tools)
+node_modules/
+
+# ========================= Backup Files =========================
+# Backup files
+*.bak
+*.backup
+*.old
+
+# ========================= Server Specific ======================
+# Server crashinfo
+crashinfo.txt
+server_crashinfo.txt
+
+# Plugin files (if you want to include them, remove these lines)
+# plugins/
+# components/
+
+# Models and custom content (uncomment if you don't want to track them)
+# models/
+# scriptfiles/
+
+# ========================= Config Files =========================
+# Sensitive configuration (uncomment if needed)
+# config.json
+# server.cfg
+
+# ========================= Custom Additions =====================
+# Add your custom ignore patterns below this line
