@@ -13,6 +13,9 @@
 #define COLOR_YELLOW  0xFFFF00FF
 #define COLOR_WHITE   0xFFFFFFFF
 
+// ------------------------------ Dialog IDs ----------------------------------
+#define DIALOG_ADMIN_HELP         101
+
 // ------------------------------ Stocks -----------------------------------
 // ฟังก์ชันช่วยแยกพารามิเตอร์
 stock SplitParams(const string[], args[][32], maxArgs = sizeof(args)) {
@@ -89,11 +92,6 @@ stock GetVehicleName(vehicleid, vehiclename[], len) {
 // ------------------------------ Short Commands -----------------------------------
 // คำสั่งแบบสั้นที่เรียกใช้คำสั่งเต็ม
 
-// คำสั่งแอดมินแบบสั้น /a
-CMD:a(playerid, params[]) {
-    return ShowAdminMainDialog(playerid);
-}
-
 CMD:v(playerid, params[]) {
     return cmd_vehicle(playerid, params);
 }
@@ -106,13 +104,20 @@ CMD:fix(playerid, params[]) {
     return cmd_repair(playerid, params);
 }
 
+CMD:a(playerid, params[]) {
+    return cmd_adminhelp(playerid, params);
+}
+
+CMD:admin(playerid, params[]) {
+    return cmd_adminhelp(playerid, params);
+}
+
+CMD:ahelp(playerid, params[]) {
+    return cmd_adminhelp(playerid, params);
+}
+
 // ------------------------------ Fully Commands ----------------------------------
 // คำสั่งแบบเต็มพร้อมฟังก์ชันการทำงานทั้งหมด
-
-// คำสั่งแอดมินแบบเต็ม /admin
-CMD:admin(playerid, params[]) {
-    return ShowAdminMainDialog(playerid);
-}
 
 // คำสั่งเสกรถแบบเต็ม /vehicle
 CMD:vehicle(playerid, params[]) {
@@ -225,3 +230,61 @@ CMD:repair(playerid, params[]) {
     return 1;
 }
 
+// คำสั่งความช่วยเหลือแอดมิน /adminhelp
+CMD:adminhelp(playerid, params[]) {
+    if(!IsPlayerConnected(playerid) || !IsPlayerLoggedIn(playerid) || PlayerIntData[playerid][AdminLevel] < 1) {
+        SendClientMessage(playerid, COLOR_RED, "ข้อผิดพลาด: คุณไม่มีสิทธิ์ใช้คำสั่งนี้!");
+        return 1;
+    }
+    
+    ShowAdminHelpDialog(playerid);
+    return 1;
+}
+
+// ------------------------------ Dialog Admin Help ---------------------------------
+// แสดง Dialog ช่วยเหลือหลักสำหรับแอดมิน
+stock ShowAdminHelpDialog(playerid) {
+    if(!IsPlayerLoggedIn(playerid) || PlayerIntData[playerid][AdminLevel] < 1) {
+        SendClientMessage(playerid, 0xFF0000AA, "ข้อผิดพลาด: คุณไม่มีสิทธิ์ใช้คำสั่งนี้!");
+        return 0;
+    }
+    
+    new list_content[1024];
+
+    // แสดงเฉพาะคำสั่งที่มีอยู่จริง เป็นลิสต์ให้เลือก
+    strcat(list_content, "{00FF00}/vehicle [ID] [สี1] [สี2]{FFFFFF} - เสกรถ\n");
+    strcat(list_content, "{00FF00}/deletevehicle{FFFFFF} - ลบรถ\n");
+    strcat(list_content, "{00FF00}/repair{FFFFFF} - ซ่อมรถ\n");
+    strcat(list_content, "{00FF00}/adminhelp{FFFFFF} - แสดงความช่วยเหลือ");
+
+    ShowPlayerDialog(playerid, DIALOG_ADMIN_HELP, DIALOG_STYLE_LIST,
+        "?? ระบบช่วยเหลือแอดมิน (เลือกเพื่อดูรายละเอียด)", list_content, "เลือก", "ปิด");
+    return 1;
+}
+
+// ส่งข้อความวิธีใช้คำสั่งไปยังแชทของผู้เล่น (เฉพาะคนที่เลือก)
+stock ShowAdminCommandUsage(playerid, index) {
+    switch(index) {
+        case 0: { // /vehicle
+            SendClientMessage(playerid, COLOR_YELLOW, "วิธีใช้: /vehicle [รหัสรถ] [สี1] [สี2]");
+            SendClientMessage(playerid, COLOR_WHITE,  "ตัวอย่าง: /vehicle 411 0 1  |  ทางลัด: /v 411 0 1");
+            SendClientMessage(playerid, COLOR_GREEN,  "ข้อกำหนด: แอดมินเลเวล 1+, รหัสรถ 400-611");
+        }
+        case 1: { // /deletevehicle
+            SendClientMessage(playerid, COLOR_YELLOW, "วิธีใช้: /deletevehicle  |  ทางลัด: /dv");
+            SendClientMessage(playerid, COLOR_WHITE,  "หมายเหตุ: ต้องนั่งอยู่ในรถที่ต้องการลบ");
+        }
+        case 2: { // /repair
+            SendClientMessage(playerid, COLOR_YELLOW, "วิธีใช้: /repair  |  ทางลัด: /fix");
+            SendClientMessage(playerid, COLOR_WHITE,  "หมายเหตุ: ต้องนั่งอยู่ในรถที่จะซ่อม");
+        }
+        case 3: { // /adminhelp
+            SendClientMessage(playerid, COLOR_YELLOW, "วิธีใช้: /adminhelp  |  ทางลัด: /ahelp, /admin, /a");
+            SendClientMessage(playerid, COLOR_WHITE,  "การทำงาน: เปิดหน้าความช่วยเหลือแอดมิน");
+        }
+        default: {
+            SendClientMessage(playerid, COLOR_RED, "ไม่พบข้อมูลวิธีใช้ของคำสั่งที่เลือก");
+        }
+    }
+    return 1;
+}
