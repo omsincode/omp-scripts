@@ -1,4 +1,6 @@
-# ==================== Open.MP Server .gitignore ====================
+##############################################
+# Pawn / open.mp workspace ignore list        #
+##############################################
 
 # ========================= Compiled Files ===========================
 # AMX compiled files
@@ -28,7 +30,6 @@ samp.ban
 
 # ========================= Development Files ====================
 # IDE and editor files
-.vscode/
 *.sublime-project
 *.sublime-workspace
 .idea/

@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0", 
+    "tasks": [
+        {
+            "label": "PAWN COMPILER",
+            "type": "shell",
+            "args": [
+            //    "${relativeFile}",
+                "${workspaceRoot}\\gamemodes\\main.pwn",
+                "-o${workspaceRoot}\\gamemodes\\main.amx"
+            ],
+            "windows": {
+                "command": "${workspaceRoot}\\qawno\\pawncc.exe"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
